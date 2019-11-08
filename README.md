@@ -30,6 +30,7 @@
 4. git checkout 브랜치이름
 
 5. 커밋 푸쉬는 원래 하던대로
+    + 푸쉬 할때만 git push -u origin 브랜치명
 
 **<--주의 사항 :  push하기  전에  git  branch로  현재  사용중인  branch  확인하기. ->**
   
