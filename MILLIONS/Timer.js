@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet } from "react-native";
 import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
 
 export default class TimerScreen extends React.Component {
@@ -28,7 +28,8 @@ export default class TimerScreen extends React.Component {
               <Text style={styles.white}>마스터</Text>
             </View>
             <View style={styles.userTimerButton}>
-              <Text style={styles.white}>측정하기</Text>
+              <Button color="white" title="측정하기" onPress={() => this.props.navigation.navigate("TimerDetail")}>
+              </Button>
             </View>
           </View>
 
@@ -41,7 +42,8 @@ export default class TimerScreen extends React.Component {
               <Text style={styles.white}>마스터</Text>
             </View>
             <View style={styles.userTimerButton}>
-              <Text style={styles.white}>측정하기</Text>
+              <Button color="white" title="측정하기" onPress={() => this.props.navigation.navigate("TimerDetail")}>
+              </Button>
             </View>
           </View>
 
@@ -54,7 +56,8 @@ export default class TimerScreen extends React.Component {
               <Text style={styles.white}>마스터</Text>
             </View>
             <View style={styles.userTimerButton}>
-              <Text style={styles.white}>측정하기</Text>
+              <Button color="white" title="측정하기" onPress={() => this.props.navigation.navigate("TimerDetail")}>
+              </Button>
             </View>
           </View>
 
@@ -67,7 +70,8 @@ export default class TimerScreen extends React.Component {
               <Text style={styles.white}>마스터</Text>
             </View>
             <View style={styles.userTimerButton}>
-              <Text style={styles.white}>측정하기</Text>
+              <Button color="white" title="측정하기" onPress={() => this.props.navigation.navigate("TimerDetail")}>
+              </Button>
             </View>
           </View>
         </View>
