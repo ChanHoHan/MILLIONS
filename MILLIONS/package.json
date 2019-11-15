@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "expo": "^35.0.0",
     "expo-cli": "^3.4.1",
     "expo-constants": "^7.0.1",
