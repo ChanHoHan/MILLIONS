@@ -1,7 +1,6 @@
 import axios from "axios";
-require("dotenv").config();
 
-axios.defaults.baseURL = process.env.LOCAL_IP;
+axios.defaults.baseURL = "172.20.10.2:8000";
 
 export default {
   // 모든 글 불러오기
