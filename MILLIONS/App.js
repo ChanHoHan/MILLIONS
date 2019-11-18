@@ -8,7 +8,12 @@ const AppNavigator = createStackNavigator(
   {
     Home: HomeScreen,
     Timer: TimerScreen,
-    TimerDetail: TimerDetailScreen
+    TimerDetail: {
+      screen: TimerDetailScreen,
+      navigationOptions: {
+        gesturesEnabled: false,
+      }
+    }
   },
   {
     initialRouteName: "Home"

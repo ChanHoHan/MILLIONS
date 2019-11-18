@@ -1,9 +1,28 @@
 
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, BackHandler } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { PanGestureHandler } from "react-native-gesture-handler";
 
 export default class TimerDetailScreen extends React.Component {
+
+    constructor(props) {
+        super(props)
+        
+        this.backButtonPress = this.backButtonPress.bind(this);
+    }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.backButtonPress);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.backButtonPress);
+    }
+
+    backButtonPress = () => {
+        return true;
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -35,6 +54,15 @@ export default class TimerDetailScreen extends React.Component {
                     </View>
                     <View>
                         <Text style={styles.fieldDetail}>그대의 노고에 누적 중</Text>
+                    </View>
+                </View>
+
+                <View style={styles.content}>
+                    <View style={styles.mainTimerInfo}>
+                        <View style={styles.stopTimerButton}>
+                            <Button color="white" title="측정중단" onPress={() => this.props.navigation.navigate("Timer")}>
+                            </Button>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -90,5 +118,13 @@ const styles = StyleSheet.create({
         textAlign: "right",
         marginRight: 70,
         fontSize: 20
+    },
+    stopTimerButton: {
+        backgroundColor: "grey",
+        borderRadius: 5,
+        width: 100,
+        alignItems: "center",
+        justifyContent: "center",
+        height: 50
     }
 });
