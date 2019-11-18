@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Button } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import timerData from "../RequestCRUD";
+import timerData from "../../RequestCRUD";
 import HomeMainTimer from "./HomeMainTimer"
 import styles from "./HomeStyles";
 
