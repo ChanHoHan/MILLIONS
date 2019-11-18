@@ -15,7 +15,7 @@
 5. npm start -> 프로젝트 잘 돌아가는지 테스트
 
 
-### branch 만들고 사용하기
+## branch 만들고 사용하기
 1. git init
 
 2. git remote origin
@@ -29,7 +29,7 @@
 **<--주의 사항 :  push하기  전에  git  branch로  현재  사용중인  branch  확인하기. -->**
   
 
-#### conflict를 줄여보자
+### conflict를 줄여보자
 github에 pull과 push를 할 때 겪는 기본적인 오류들을 줄여보자
 1. 다른 사람의 코드를 pull을 통해서 받기 전에는 반드시 git add / git commit -m / git pull 후에 받도록 한다.
 
@@ -43,7 +43,7 @@ github에 pull과 push를 할 때 겪는 기본적인 오류들을 줄여보자
     git pull origin (branch이름) --allow-unrelated-histories 를 통해 해결이 가능하다!
 
 
-##### repository 받아오고 실행 시 front-end back-end 연결이 원활하지 않을 때 !
+## repository 받아오고 실행 시 front-end back-end 연결이 원활하지 않을 때 !
 이제는 front-end와 back-end를 서로 연결 시켜 놓았기 때문에 서버를 돌려놔야 front-end 실행이 됩니다.
 
 1. front-end 설정
