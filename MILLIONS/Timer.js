@@ -25,6 +25,7 @@ export default class TimerScreen extends React.Component {
   }
 
   render() {
+    console.log(this.state.timerList);
     return (
       <View style={styles.container}>
         <View style={styles.header}>

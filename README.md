@@ -10,6 +10,7 @@
 1. 원하는 폴더에서 터미널 켜기
 
 2) git clone https://github.com/ChanHoHan/MILLIONS.git
+<<<<<<< HEAD
 
    - 브랜치만 가져오고 싶을때는 git clone -b 브랜치명 https://github.com/ChanHoHan/MILLIONS.git
 
@@ -34,6 +35,14 @@
 유의 사항 : BACKEND_HOST 부분에 http:// 꼭 적어줘야함.
 
 6. npm start -> 프로젝트 잘 돌아가는지 테스트
+=======
+
+3) cd MILLIONS/MILLIONS
+
+4) npm install
+
+5) npm start -> 프로젝트 잘 돌아가는지 테스트
+>>>>>>> a4b881ec83dbd0a2eb9c7e6e4ad3bfce339ad891
 
 ### branch 만들고 사용하기
 
