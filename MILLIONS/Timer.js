@@ -25,6 +25,7 @@ export default class TimerScreen extends React.Component {
   }
 
   render() {
+    console.log(this.state.timerList);
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -32,14 +33,12 @@ export default class TimerScreen extends React.Component {
         </View>
         <View style={styles.content}>
           {this.state.timerList.map(timerSet => (
-            <View>
+            <View key={timerSet.pk}>
               {(function() {
                 if (timerSet.is_main_category === true)
                   return (
                     <MainTimer
-                      id={timerSet.id}
                       category={timerSet.category}
-                      key={timerSet.id}
                       time={timerSet.time}
                     />
                   );
@@ -47,7 +46,7 @@ export default class TimerScreen extends React.Component {
             </View>
           ))}
           {this.state.timerList.map(timerSet => (
-            <View style={styles.elem}>
+            <View style={styles.elem} key={timerSet.pk}>
               <View style={styles.userInfo}>
                 <View
                   style={
