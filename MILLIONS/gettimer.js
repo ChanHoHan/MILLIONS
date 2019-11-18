@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "172.20.10.2:8000";
+axios.defaults.baseURL = "http://172.20.10.2:8000";
 
 export default {
   // 모든 글 불러오기

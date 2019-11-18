@@ -48,9 +48,9 @@ github에 pull과 push를 할 때 겪는 기본적인 오류들을 줄여보자
 
 1. front-end 설정
     먼저 master 브랜치의 코드를 pull 해오면 front-end의 gettimer.js라는 파일이 있을겁니다. 여기서 axios.defaults.baseURL = "" 이렇게 비어 있을 겁니다.
-    두 따옴표 사이에 empty string을 (본인ip번호):(본인port번호)로 바꾸어 줍니다.
-    여기서 가장 중요한 것은 localhost로 돌린다고 해서 "127.0.0.1:8000" 을 넣고 돌리시면 안 됩니다.
-**<-- 127.0.0.1:8000이 아닌 본인이 사용하고 있는 실제 ip주소를 입력해야합니다. -->**
+    두 따옴표 사이에 empty string을 http://(본인ip번호):(본인port번호)로 바꾸어 줍니다.
+    여기서 가장 중요한 것은 localhost로 돌린다고 해서 "http://127.0.0.1:8000" 을 넣고 돌리시면 안 됩니다.
+**<-- http://127.0.0.1:8000이 아닌 본인이 사용하고 있는 실제 ip주소를 입력해야합니다. -->**
 
 2. back-end 실행
 **<- python3 manage.py runserver (입력했던ip주소):(입력했던port번호)로 실행합니다. -->**
