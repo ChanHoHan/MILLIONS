@@ -29,7 +29,7 @@
 **<--주의 사항 :  push하기  전에  git  branch로  현재  사용중인  branch  확인하기. -->**
   
 
-### conflict를 줄여보자
+## conflict를 줄여보자
 github에 pull과 push를 할 때 겪는 기본적인 오류들을 줄여보자
 1. 다른 사람의 코드를 pull을 통해서 받기 전에는 반드시 git add / git commit -m / git pull 후에 받도록 한다.
 
