@@ -1,8 +1,29 @@
 import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { AntDesign, Feather, FontAwesome } from "@expo/vector-icons";
+import timerData from "./gettimer";
+import MainTimer from "./MainTimer";
 
 export default class TimerScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      category: "",
+      time: "",
+      is_main_category: "",
+      timerList: []
+    };
+  }
+
+  componentDidMount() {
+    this.getTimers();
+  }
+
+  async getTimers() {
+    const _timerList = await timerData.getAllTimers();
+    this.setState({ timerList: _timerList.data });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -10,70 +31,43 @@ export default class TimerScreen extends React.Component {
           <Text style={styles.headerText}>Millons</Text>
         </View>
         <View style={styles.content}>
-          <View style={styles.mainTimerInfo}>
-            <View style={styles.mainTimerHead}>
-              <AntDesign size={60} name="clockcircleo"></AntDesign>
-              <Text style={styles.mainTimerMent}>그대의 노고</Text>
+          {this.state.timerList.map(timerSet => (
+            <View key={timerSet.pk}>
+              {(function() {
+                if (timerSet.is_main_category === true)
+                  return (
+                    <MainTimer
+                      category={timerSet.category}
+                      time={timerSet.time}
+                    />
+                  );
+              })()}
             </View>
-            <Text style={styles.mainTimerSubject}>공부</Text>
-            <Text style={styles.mainTimerTime}>100:00:00</Text>
-          </View>
-
-          <View style={styles.elem}>
-            <View style={styles.userInfo}>
-              <View style={styles.circle} />
-              <Text style={styles.subject}>공부</Text>
+          ))}
+          {this.state.timerList.map(timerSet => (
+            <View style={styles.elem} key={timerSet.pk}>
+              <View style={styles.userInfo}>
+                <View
+                  style={
+                    timerSet.is_main_category === false
+                      ? styles.circleYellow
+                      : styles.circleRed
+                  }
+                />
+                <Text style={styles.subject}>{timerSet.category}</Text>
+              </View>
+              <View style={styles.grade}>
+                <Text>마스터</Text>
+              </View>
+              <View style={styles.userTimerButton}>
+                <Button
+                  color="white"
+                  title="측정하기"
+                  onPress={() => this.props.navigation.navigate("TimerDetail")}
+                ></Button>
+              </View>
             </View>
-            <View style={styles.grade}>
-              <Text style={styles.white}>마스터</Text>
-            </View>
-            <View style={styles.userTimerButton}>
-              <Button color="white" title="측정하기" onPress={() => this.props.navigation.navigate("TimerDetail")}>
-              </Button>
-            </View>
-          </View>
-
-          <View style={styles.elem}>
-            <View style={styles.userInfo}>
-              <View style={styles.circle} />
-              <Text style={styles.subject}>운동</Text>
-            </View>
-            <View style={styles.grade}>
-              <Text style={styles.white}>마스터</Text>
-            </View>
-            <View style={styles.userTimerButton}>
-              <Button color="white" title="측정하기" onPress={() => this.props.navigation.navigate("TimerDetail")}>
-              </Button>
-            </View>
-          </View>
-
-          <View style={styles.elem}>
-            <View style={styles.userInfo}>
-              <View style={styles.circle} />
-              <Text style={styles.subject}>독서</Text>
-            </View>
-            <View style={styles.grade}>
-              <Text style={styles.white}>마스터</Text>
-            </View>
-            <View style={styles.userTimerButton}>
-              <Button color="white" title="측정하기" onPress={() => this.props.navigation.navigate("TimerDetail")}>
-              </Button>
-            </View>
-          </View>
-
-          <View style={styles.elem}>
-            <View style={styles.userInfo}>
-              <View style={styles.circle} />
-              <Text style={styles.subject}>코딩</Text>
-            </View>
-            <View style={styles.grade}>
-              <Text style={styles.white}>마스터</Text>
-            </View>
-            <View style={styles.userTimerButton}>
-              <Button color="white" title="측정하기" onPress={() => this.props.navigation.navigate("TimerDetail")}>
-              </Button>
-            </View>
-          </View>
+          ))}
         </View>
         <View style={styles.footer}>
           <FontAwesome
@@ -156,11 +150,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 50
   },
-  circle: {
+  circleYellow: {
     width: 30,
     height: 30,
     borderRadius: 25,
     backgroundColor: "yellow"
+  },
+  circleRed: {
+    width: 30,
+    height: 30,
+    borderRadius: 25,
+    backgroundColor: "red"
   },
   subject: {
     paddingLeft: 10,
