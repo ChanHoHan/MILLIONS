@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import LoginScreen from "./ComponentsWithStyles/Login/Login.js"
@@ -14,6 +15,27 @@ const AppNavigator = createStackNavigator(
         gesturesEnabled: false,
       }
     }
+=======
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import SignUp from './signup'
+
+
+export default function App() {
+  
+
+  return (
+    <SignUp/>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+>>>>>>> chanhohan
   },
   {
     initialRouteName: "Login"
