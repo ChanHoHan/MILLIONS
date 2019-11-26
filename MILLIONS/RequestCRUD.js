@@ -1,7 +1,7 @@
 import axios from "axios";
 import ENV from "./environment";
 
-axios.defaults.baseURL = ENV.BACKEND_HOST;
+axios.defaults.baseURL = "";
 
 export default {
   readTimer() {

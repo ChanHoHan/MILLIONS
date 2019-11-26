@@ -1,13 +1,8 @@
 // SignUp.js
 import React from 'react'
-import {
-  View,
-  Button,
-  TextInput,
-  StyleSheet
-} from 'react-native'
-
-export default class SignUp extends React.Component {
+import {View,Button,TextInput,StyleSheet} from 'react-native'
+import styles from './SignUpStyles.js';
+export default class SignUpScreen extends React.Component {
   state = {
     username: '', password: '', email: '', phone_number: ''
   }
@@ -59,21 +54,3 @@ export default class SignUp extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  input: {
-    width: 350,
-    height: 55,
-    backgroundColor: '#42A5F5',
-    margin: 10,
-    padding: 8,
-    color: 'white',
-    borderRadius: 14,
-    fontSize: 18,
-    fontWeight: '500',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-})
