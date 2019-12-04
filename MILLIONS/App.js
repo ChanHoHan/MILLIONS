@@ -1,22 +1,22 @@
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
-import HomeScreen from "./Home";
-import TimerScreen from "./Timer";
-import TimerDetailScreen from "./TimerDetail";
+import LoginScreen from "./ComponentsWithStyles/Login/Login.js";
+import HomeScreen from "./ComponentsWithStyles/Home/Home.js";
+import HomeDetailScreen from "./ComponentsWithStyles/Home/HomeDetail.js";
 
 const AppNavigator = createStackNavigator(
   {
+    Login: LoginScreen,
     Home: HomeScreen,
-    Timer: TimerScreen,
-    TimerDetail: {
-      screen: TimerDetailScreen,
+    HomeDetail: {
+      screen: HomeDetailScreen,
       navigationOptions: {
-        gesturesEnabled: false,
+        gesturesEnabled: false
       }
     }
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Login"
   }
 );
 export default createAppContainer(AppNavigator);
