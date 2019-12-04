@@ -19,7 +19,8 @@ export default class HomeDetailScreen extends React.Component {
       hour: 0,
       min: 0,
       sec: 0,
-      flag: 1
+      firstTimeClicked: 0,
+      paused: 1,
     };
     this.backButtonPress = this.backButtonPress.bind(this);
   }
@@ -31,38 +32,37 @@ export default class HomeDetailScreen extends React.Component {
     const _timerList = await timerData.readTimer();
     this.setState({ timerList: _timerList.data });
   }
-  countButton() {
-    if (this.state.flag === 0) {
-      this.state.flag = 1;
-      clearInterval(this.myInterval);
-      console.log(this.state.flag + "인터벌 지움");
-    } else {
-      this.state.flag = 0;
-      this.setState(prevState => ({
-        flag: prevState.flag
-      }));
-      this.myInterval = setInterval(() => {
-        this.setState(prevState => ({
-          sec: prevState.sec + 1,
-          flag: prevState.flag
-        }));
-        //분 증가
-        if (this.state.sec === 60) {
-          this.setState(prevState => ({
-            sec: 0,
-            min: prevState.min + 1
-          }));
-        }
-        //시간 증가
-        if (this.state.min === 60) {
-          this.setState(prevState => ({
-            min: 0,
-            hour: prevState.hour + 1
-          }));
-        }
-      }, 1000);
-    }
-  }
+
+  // countButton() {
+  //   if (this.state.firstTimeClicked === 0) {
+  //     this.setState(prevState => ({
+  //       firstTimeClicked: 1
+  //     }));
+  //   }
+
+  //   if (this.state.firstTimeClicked !== 0 && this.state.paused === 0) {
+  //     this.myInterval = setInterval(() => {
+  //       this.setState(prevState => ({
+  //         sec: prevState.sec + 1,
+  //       }));
+  //       //분 증가
+  //       if (this.state.sec === 60) {
+  //         this.setState(prevState => ({
+  //           sec: 0,
+  //           min: prevState.min + 1
+  //         }));
+  //       }
+  //       //시간 증가
+  //       if (this.state.min === 60) {
+  //         this.setState(prevState => ({
+  //           min: 0,
+  //           hour: prevState.hour + 1
+  //         }));
+  //       }
+  //     }, 1000)
+  //   }
+  // }
+
   componentWillMount() {
     BackHandler.addEventListener("hardwareBackPress", this.backButtonPress);
   }
@@ -116,90 +116,61 @@ export default class HomeDetailScreen extends React.Component {
         </View>
 
         <View style={styles.HomeDetailContent}>
-          <View style={styles.HomeDetailButtonBox}>
-            <View
-              style={
-                this.state.flag === 1
-                  ? styles.HomeDetailTimerButton
-                  : styles.HomeDetailTimerButton2
-              }
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  this.countButton();
-                  this.setState(prevState => ({
-                    flag: prevState.flag
-                  }));
-                }}
-              >
-                <Text style={{ color: "white" }}>
-                  {this.state.flag === 1 ? "측정시작" : "측정중지"}
+          {this.state.firstTimeClicked === 0
+            ? <View style={styles.HomeDetailButtonBox}>
+              <View style={styles.HomeDetailTimerButton}>
+                <TouchableOpacity
+                  onPress={() => {
+                    // this.setState(prevState => ({
+                    //   paused: 0
+                    // }));
+                    // this.countButton();
+                  }}>
+                  <Text style={{ color: "white" }}>
+                    측정시작
                 </Text>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+            : <View style={styles.HomeDetailButtonBox}>
+              {this.state.paused === 0
+                ? <View style={styles.HomeDetailTimerButton2}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      // this.setState(prevState => ({
+                      //   paused: 1
+                      // }));
+                    }}>
+                    <Text style={{ color: "white" }}>
+                      일시정지
+                      </Text>
+                  </TouchableOpacity>
+                </View>
+                : <View style={styles.HomeDetailTimerButton}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      // this.setState(prevState => ({
+                      //   paused: 0
+                      // }));
+                    }}>
+                    <Text style={{ color: "white" }}>
+                      이어서 측정하기
+                      </Text>
+                  </TouchableOpacity>
+                </View>
+              }
+              <View style={styles.HomeDetailTimerButton}>
+                <TouchableOpacity
+                  onPress={() => { this.props.navigation.navigate("Home") }}>
+                  <Text style={{ color: "white" }}>
+                    중지 및 저장
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          }
         </View>
       </View>
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1
-//     },
-
-//     header: {
-//         height: 60,
-//         alignItems: "center",
-//         marginTop: 30,
-//         marginBottom: 30
-//     },
-//     headerText: {
-//         fontWeight: "bold",
-//         color: "black",
-//         fontSize: 30
-//     },
-//     content: {
-//         flex: 1
-//     },
-//     mainTimerInfo: {
-//         width: "100%",
-//         alignItems: "center",
-//         justifyContent: "center"
-//     },
-//     mainTimerHead: {
-//         flexDirection: "row"
-//     },
-//     timerTextInfo: {
-//         marginLeft: 25,
-//         textAlign: "right",
-//         fontWeight: "600",
-//         fontSize: 30,
-//     },
-//     plusTextInfo: {
-//         marginLeft: 40,
-//         textAlign: "right",
-//         fontWeight: "600",
-//         fontSize: 30
-//     },
-//     fieldTitle: {
-//         textAlign: "left",
-//         marginLeft: 70,
-//         fontWeight: "800",
-//         fontSize: 20
-//     },
-//     fieldDetail: {
-//         textAlign: "right",
-//         marginRight: 70,
-//         fontSize: 20
-//     },
-//     stopTimerButton: {
-//         backgroundColor: "grey",
-//         borderRadius: 5,
-//         width: 100,
-//         alignItems: "center",
-//         justifyContent: "center",
-//         height: 50
-//     }
-// });

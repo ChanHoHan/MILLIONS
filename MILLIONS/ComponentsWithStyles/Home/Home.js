@@ -35,7 +35,7 @@ export default class HomeScreen extends React.Component {
         <View style={styles.HomeContent}>
           {this.state.timerList.map(timerSet => (
             <View key={timerSet.pk}>
-              {(function() {
+              {(function () {
                 if (timerSet.is_main_category === true)
                   return (
                     <HomeMainTimer
@@ -89,103 +89,3 @@ export default class HomeScreen extends React.Component {
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1
-//   },
-
-//   header: {
-//     height: 60,
-//     alignItems: "center"
-//   },
-//   headerText: {
-//     fontWeight: "bold",
-//     color: "white",
-//     fontSize: 30
-//   },
-
-//   content: {
-//     flex: 1
-//   },
-//   mainTimerInfo: {
-//     width: "100%",
-//     alignItems: "center",
-//     justifyContent: "center"
-//   },
-//   mainTimerHead: {
-//     flexDirection: "row"
-//   },
-//   mainTimerMent: {
-//     textAlign: "center",
-//     fontSize: 25,
-//     marginLeft: 10,
-//     marginTop: 10,
-//     fontWeight: "bold"
-//   },
-//   mainTimerSubject: {
-//     textAlign: "center",
-//     fontSize: 50,
-//     fontWeight: "bold"
-//   },
-//   mainTimerTime: {
-//     textAlign: "center",
-//     fontSize: 60,
-//     fontWeight: "600"
-//   },
-//   elem: {
-//     width: "100%",
-//     flexDirection: "row",
-//     alignItems: "center",
-//     justifyContent: "space-between",
-//     borderColor: "#eee",
-//     borderBottomWidth: 0.5,
-//     padding: 5,
-//     backgroundColor: "lightgray"
-//   },
-//   userInfo: {
-//     flexDirection: "row",
-//     alignItems: "center"
-//   },
-//   userTimerButton: {
-//     padding: 8,
-//     backgroundColor: "#5882FA",
-//     borderRadius: 5,
-//     width: 100,
-//     alignItems: "center",
-//     justifyContent: "center",
-//     height: 50
-//   },
-//   circleYellow: {
-//     width: 30,
-//     height: 30,
-//     borderRadius: 25,
-//     backgroundColor: "yellow"
-//   },
-//   circleRed: {
-//     width: 30,
-//     height: 30,
-//     borderRadius: 25,
-//     backgroundColor: "red"
-//   },
-//   subject: {
-//     paddingLeft: 10,
-//     fontWeight: "bold"
-//   },
-//   grade: {
-//     backgroundColor: "gray",
-//     width: 60,
-//     height: 40,
-//     borderRadius: 5,
-//     justifyContent: "center",
-//     alignItems: "center"
-//   },
-//   white: {
-//     color: "white"
-//   },
-//   footer: {
-//     height: 80,
-//     flexDirection: "row",
-//     justifyContent: "space-between"
-//   }
-// });
