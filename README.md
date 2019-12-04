@@ -7,7 +7,7 @@
 
 ### 초기 세팅
 
-1. 원하는 폴더에서 터미널 켜기
+1) 원하는 폴더에서 터미널 켜기
 
 2) git clone https://github.com/ChanHoHan/MILLIONS.git
 
