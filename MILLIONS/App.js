@@ -3,6 +3,8 @@ import { createStackNavigator } from "react-navigation-stack";
 import LoginScreen from "./ComponentsWithStyles/Login/Login.js";
 import HomeScreen from "./ComponentsWithStyles/Home/Home.js";
 import HomeDetailScreen from "./ComponentsWithStyles/Home/HomeDetail.js";
+import HomeAddSubjectScreen from "./ComponentsWithStyles/Home/HomeAddSubject.js";
+import HomeGradeInfoScreen from "./ComponentsWithStyles/Home/HomeGradeInfo.js";
 
 const AppNavigator = createStackNavigator(
   {
@@ -13,7 +15,9 @@ const AppNavigator = createStackNavigator(
       navigationOptions: {
         gesturesEnabled: false
       }
-    }
+    },
+    HomeAddSubject: HomeAddSubjectScreen,
+    HomeGradeInfo: HomeGradeInfoScreen
   },
   {
     initialRouteName: "Login"

@@ -121,6 +121,13 @@ const styles = StyleSheet.create({
   HomeElementDetailText: {
     color: "white"
   },
+  HomeElementActionButtonContiner: {
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  HomeElementActionButton: {
+    marginHorizontal: 30
+  },
 
   //HomeDetail
   HomeDetailContainer: {

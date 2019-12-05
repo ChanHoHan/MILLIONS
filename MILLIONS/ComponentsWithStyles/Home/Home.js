@@ -77,6 +77,20 @@ export default class HomeScreen extends React.Component {
             </View>
           ))}
         </View>
+        <View style={styles.HomeElementActionButtonContiner}>
+          <TouchableOpacity
+            style={styles.HomeElementDetailButtonContainer}
+            onPress={() => this.props.navigation.navigate("HomeAddSubject")}
+          >
+            <Text style={styles.HomeElementDetailText}>과목 추가</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.HomeElementDetailButtonContainer}
+            onPress={() => this.props.navigation.navigate("HomeGradeInfo")}
+          >
+            <Text style={styles.HomeElementDetailText}>등급표</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.Navigator}>
           <FontAwesome
