@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import timerData from "../../RequestCRUD";
 import HomeMainTimer from "./HomeMainTimer";
+import HomeSubTimer from "./HomeSubTimer";
 import styles from "./HomeStyles";
 
 export default class HomeScreen extends React.Component {
@@ -33,7 +34,8 @@ export default class HomeScreen extends React.Component {
         </View>
 
         <View style={styles.HomeContent}>
-          {this.state.timerList.map(timerSet => (
+          {//메인 타이머
+          this.state.timerList.map(timerSet => (
             <View key={timerSet.pk}>
               {(function() {
                 if (timerSet.is_main_category === true)
@@ -46,46 +48,32 @@ export default class HomeScreen extends React.Component {
               })()}
             </View>
           ))}
-          {this.state.timerList.map(timerSet => (
-            <View style={styles.HomeElementContainer} key={timerSet.pk}>
-              <View style={styles.HomeElementUserInfo}>
-                <View
-                  style={
-                    timerSet.is_main_category === false
-                      ? styles.HomeElementCircleYellow
-                      : styles.HomeElementCircleRed
-                  }
-                />
-                <Text style={styles.HomeElementCategoryTitle}>
-                  {timerSet.category}
-                </Text>
-              </View>
-              <View style={styles.HomeElementUserLevelContainer}>
-                <Text style={styles.HomeElementUserLevelTitle}>마스터</Text>
-              </View>
 
-              <TouchableOpacity
-                style={styles.HomeElementDetailButtonContainer}
-                onPress={() =>
-                  this.props.navigation.navigate("HomeDetail", {
-                    pk: timerSet.pk
-                  })
-                }
-              >
-                <Text style={styles.HomeElementDetailText}>측정하기</Text>
-              </TouchableOpacity>
-            </View>
+          {//서브 타이머
+          this.state.timerList.map(timerSet => (
+            <HomeSubTimer
+              key={timerSet.pk}
+              pk={timerSet.pk}
+              is_main_category={timerSet.is_main_category}
+              category={timerSet.category}
+              navigation={this.props.navigation}
+            ></HomeSubTimer>
           ))}
         </View>
+
+        {/*기능 버튼*/}
         <View style={styles.HomeElementActionButtonContiner}>
+          {/*과목 추가 버튼*/}
           <TouchableOpacity
-            style={styles.HomeElementDetailButtonContainer}
+            style={styles.HomeElementActionButton}
             onPress={() => this.props.navigation.navigate("HomeAddSubject")}
           >
             <Text style={styles.HomeElementDetailText}>과목 추가</Text>
           </TouchableOpacity>
+
+          {/*등급표 버튼*/}
           <TouchableOpacity
-            style={styles.HomeElementDetailButtonContainer}
+            style={styles.HomeElementActionButton}
             onPress={() => this.props.navigation.navigate("HomeGradeInfo")}
           >
             <Text style={styles.HomeElementDetailText}>등급표</Text>

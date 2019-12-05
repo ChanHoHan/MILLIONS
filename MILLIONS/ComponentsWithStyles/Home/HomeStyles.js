@@ -126,7 +126,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   HomeElementActionButton: {
-    marginHorizontal: 30
+    marginHorizontal: 30,
+    padding: 8,
+    backgroundColor: "#5882FA",
+    borderRadius: 5,
+    width: 75,
+    alignItems: "center",
+    justifyContent: "center",
+    height: 50
   },
 
   //HomeDetail
@@ -199,6 +206,34 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 50,
     marginRight: 10
+  },
+
+  //HomeAddSubject
+  HomeAddSubjectContainer: {
+    flex: 1
+  },
+  HomeAddSubjectInput: {
+    borderWidth: 1,
+    borderColor: "white",
+    borderBottomColor: "gray",
+    height: 50,
+    fontSize: 25,
+    marginBottom: 50
+  },
+  HomeAddSubjectButtonContainer: {
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  HomeAddSubjectButton: {
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "green",
+    width: "60%",
+    borderRadius: 25
+  },
+  HomeAddSubjectButtonText: {
+    color: "white"
   }
 });
 
