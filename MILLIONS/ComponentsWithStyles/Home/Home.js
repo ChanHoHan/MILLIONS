@@ -35,7 +35,7 @@ export default class HomeScreen extends React.Component {
         <View style={styles.HomeContent}>
           {this.state.timerList.map(timerSet => (
             <View key={timerSet.pk}>
-              {(function () {
+              {(function() {
                 if (timerSet.is_main_category === true)
                   return (
                     <HomeMainTimer
@@ -66,7 +66,11 @@ export default class HomeScreen extends React.Component {
 
               <TouchableOpacity
                 style={styles.HomeElementDetailButtonContainer}
-                onPress={() => this.props.navigation.navigate("HomeDetail")}
+                onPress={() =>
+                  this.props.navigation.navigate("HomeDetail", {
+                    pk: timerSet.pk
+                  })
+                }
               >
                 <Text style={styles.HomeElementDetailText}>측정하기</Text>
               </TouchableOpacity>

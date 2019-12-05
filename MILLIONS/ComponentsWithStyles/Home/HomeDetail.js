@@ -2,12 +2,13 @@ import React from "react";
 import { View, Text, TouchableOpacity, BackHandler } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import styles from "./HomeStyles";
+import timerData from "../../RequestCRUD";
 
-function Timer({ sec, hour, min, style }) {
+function Timer({ second, hour, minute, style }) {
   const pad = n => (n < 10 ? "0" + n : n);
   return (
     <Text style={style}>
-      {pad(hour)}:{pad(min)}:{pad(sec)}
+      {pad(hour)}:{pad(minute)}:{pad(second)}
     </Text>
   );
 }
@@ -17,13 +18,15 @@ export default class HomeDetailScreen extends React.Component {
     super(props);
     this.state = {
       hour: 0,
-      min: 0,
-      sec: 0,
+      minute: 0,
+      second: 0,
       firstTimeClicked: 0,
       paused: 1,
+      timerList: []
     };
     this.backButtonPress = this.backButtonPress.bind(this);
   }
+
   componentDidMount() {
     this.loadTimers();
   }
@@ -33,35 +36,35 @@ export default class HomeDetailScreen extends React.Component {
     this.setState({ timerList: _timerList.data });
   }
 
-  // countButton() {
-  //   if (this.state.firstTimeClicked === 0) {
-  //     this.setState(prevState => ({
-  //       firstTimeClicked: 1
-  //     }));
-  //   }
+  countButton() {
+    if (this.state.firstTimeClicked === 0) {
+      this.setState(prevState => ({
+        firstTimeClicked: 1
+      }));
+    }
 
-  //   if (this.state.firstTimeClicked !== 0 && this.state.paused === 0) {
-  //     this.myInterval = setInterval(() => {
-  //       this.setState(prevState => ({
-  //         sec: prevState.sec + 1,
-  //       }));
-  //       //분 증가
-  //       if (this.state.sec === 60) {
-  //         this.setState(prevState => ({
-  //           sec: 0,
-  //           min: prevState.min + 1
-  //         }));
-  //       }
-  //       //시간 증가
-  //       if (this.state.min === 60) {
-  //         this.setState(prevState => ({
-  //           min: 0,
-  //           hour: prevState.hour + 1
-  //         }));
-  //       }
-  //     }, 1000)
-  //   }
-  // }
+    if (this.state.firstTimeClicked !== 0 && this.state.paused === 0) {
+      this.myInterval = setInterval(() => {
+        this.setState(prevState => ({
+          second: prevState.sec + 1
+        }));
+        //분 증가
+        if (this.state.second === 60) {
+          this.setState(prevState => ({
+            second: 0,
+            minute: prevState.minute + 1
+          }));
+        }
+        //시간 증가
+        if (this.state.minute === 60) {
+          this.setState(prevState => ({
+            minute: 0,
+            hour: prevState.hour + 1
+          }));
+        }
+      }, 1000);
+    }
+  }
 
   componentWillMount() {
     BackHandler.addEventListener("hardwareBackPress", this.backButtonPress);
@@ -76,7 +79,9 @@ export default class HomeDetailScreen extends React.Component {
   };
 
   render() {
-    const { hour, min, sec } = this.state;
+    const { hour, minute, second } = this.state;
+    const { navigation } = this.props;
+    const pk = navigation.getParam("pk");
     return (
       <View style={styles.HomeDetailContainer}>
         <View style={styles.LogoContainer}>
@@ -87,16 +92,30 @@ export default class HomeDetailScreen extends React.Component {
           <View style={styles.HomeDetailIconBox}>
             <View style={styles.HomeDetailFieldArrangement}>
               <AntDesign size={50} name={"clockcircleo"}></AntDesign>
-              <Text style={styles.HomeDetailTimerText}>10 : 20 : 30</Text>
+              {this.state.timerList.map(timerSet => (
+                <View key={timerSet.pk}>
+                  {(function() {
+                    if (timerSet.pk === pk) {
+                      const pad = n => (n < 10 ? "0" + n : n);
+                      return (
+                        <Text style={styles.HomeDetailTimerText}>
+                          {pad(timerSet.hour)}:{pad(timerSet.minute)}:
+                          {pad(timerSet.second)}
+                        </Text>
+                      );
+                    }
+                  })()}
+                </View>
+              ))}
             </View>
             <View style={styles.HomeDetailIconBox}>
               <View style={styles.HomeDetailFieldArrangement}>
                 <AntDesign size={30} name={"plus"}></AntDesign>
                 <Timer
                   style={styles.HomeDetailFieldText}
-                  sec={sec}
+                  second={second}
                   hour={hour}
-                  min={min}
+                  minute={minute}
                 />
               </View>
             </View>
@@ -105,19 +124,31 @@ export default class HomeDetailScreen extends React.Component {
 
         <View style={styles.HomeDetailContent}>
           <View style={styles.HomeDetailFieldArrangement}>
-            <Text style={styles.HomeDetailFieldTitle}>공부</Text>
-            <Text style={{ fontSize: 20 }}>라는</Text>
+            {this.state.timerList.map(timerSet => (
+              <View key={timerSet.pk}>
+                {(function() {
+                  if (timerSet.pk === pk) {
+                    return (
+                      <Text style={styles.HomeDetailFieldTitle}>
+                        {timerSet.category}
+                      </Text>
+                    );
+                  }
+                })()}
+              </View>
+            ))}
+            <Text style={{ fontSize: 20 }}>에</Text>
           </View>
           <View>
             <Text style={styles.HomeDetailFieldText}>
-              그대의 노고에 누적 중
+              그대의 노고를 누적 중
             </Text>
           </View>
         </View>
 
         <View style={styles.HomeDetailContent}>
-          {this.state.firstTimeClicked === 0
-            ? <View style={styles.HomeDetailButtonBox}>
+          {this.state.firstTimeClicked === 0 ? (
+            <View style={styles.HomeDetailButtonBox}>
               <View style={styles.HomeDetailTimerButton}>
                 <TouchableOpacity
                   onPress={() => {
@@ -125,50 +156,50 @@ export default class HomeDetailScreen extends React.Component {
                     //   paused: 0
                     // }));
                     // this.countButton();
-                  }}>
-                  <Text style={{ color: "white" }}>
-                    측정시작
-                </Text>
+                  }}
+                >
+                  <Text style={{ color: "white" }}>측정시작</Text>
                 </TouchableOpacity>
               </View>
             </View>
-            : <View style={styles.HomeDetailButtonBox}>
-              {this.state.paused === 0
-                ? <View style={styles.HomeDetailTimerButton2}>
+          ) : (
+            <View style={styles.HomeDetailButtonBox}>
+              {this.state.paused === 0 ? (
+                <View style={styles.HomeDetailTimerButton2}>
                   <TouchableOpacity
-                    onPress={() => {
-                      // this.setState(prevState => ({
-                      //   paused: 1
-                      // }));
-                    }}>
-                    <Text style={{ color: "white" }}>
-                      일시정지
-                      </Text>
+                  // onPress={() => {
+                  //   this.setState(prevState => ({
+                  //     paused: 1
+                  //   }));
+                  // }}
+                  >
+                    <Text style={{ color: "white" }}>일시정지</Text>
                   </TouchableOpacity>
                 </View>
-                : <View style={styles.HomeDetailTimerButton}>
+              ) : (
+                <View style={styles.HomeDetailTimerButton}>
                   <TouchableOpacity
-                    onPress={() => {
-                      // this.setState(prevState => ({
-                      //   paused: 0
-                      // }));
-                    }}>
-                    <Text style={{ color: "white" }}>
-                      이어서 측정하기
-                      </Text>
+                  // onPress={() => {
+                  //   this.setState(prevState => ({
+                  //     paused: 0
+                  //   }));
+                  // }}
+                  >
+                    <Text style={{ color: "white" }}>이어서 측정하기</Text>
                   </TouchableOpacity>
                 </View>
-              }
+              )}
               <View style={styles.HomeDetailTimerButton}>
                 <TouchableOpacity
-                  onPress={() => { this.props.navigation.navigate("Home") }}>
-                  <Text style={{ color: "white" }}>
-                    중지 및 저장
-                  </Text>
+                  onPress={() => {
+                    this.props.navigation.navigate("Home");
+                  }}
+                >
+                  <Text style={{ color: "white" }}>중지 및 저장</Text>
                 </TouchableOpacity>
               </View>
             </View>
-          }
+          )}
         </View>
       </View>
     );
