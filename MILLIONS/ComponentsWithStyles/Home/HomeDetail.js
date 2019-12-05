@@ -4,15 +4,6 @@ import { AntDesign } from "@expo/vector-icons";
 import styles from "./HomeStyles";
 import timerData from "../../RequestCRUD";
 
-function Timer({ second, hour, minute, style }) {
-  const pad = n => (n < 10 ? "0" + n : n);
-  return (
-    <Text style={style}>
-      {pad(hour)}:{pad(minute)}:{pad(second)}
-    </Text>
-  );
-}
-
 export default class HomeDetailScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -20,15 +11,64 @@ export default class HomeDetailScreen extends React.Component {
       hour: 0,
       minute: 0,
       second: 0,
+      time: 0,
+      paused: true,
       firstTimeClicked: 0,
-      paused: 1,
-      timerList: []
+      timerList: [],
     };
     this.backButtonPress = this.backButtonPress.bind(this);
   }
 
-  componentDidMount() {
-    this.loadTimers();
+  handleAction() {
+    const { hour, minute, second, paused } = this.state;
+
+    this.setState(() => ({
+      paused: !paused,
+      firstTimeClicked: 1,
+      time: Number((hour * 3600) + (minute * 60) + second)
+    }), () => this.timerStart());
+  }
+
+  handlePause() {
+    const { paused } = this.state;
+    clearInterval(this.interval);
+    this.setState(() => ({
+      paused: !paused,
+    }));
+  }
+
+  handleSave() {
+    this.props.navigation.navigate("Home");
+  }
+
+  timerStart() {
+    this.interval = setInterval(() => {
+      this.timerAction()
+    }, 1000);
+  }
+
+  timerAction() {
+    const { time } = this.state;
+
+    this.setState(() => ({
+      time: time + 1,
+    }), () => this.timeSetter());
+  }
+
+  timeSetter() {
+    const { time } = this.state;
+
+    this.setState(() => ({
+      hour: Math.floor(time / 3600),
+    }), () => {
+      this.setState((prevState) => ({
+        minute: Math.floor((time - prevState.hour * 3600) / 60),
+      }), () => {
+        this.setState((prevState) => ({
+          second: time - prevState.hour * 3600 - prevState.minute * 60,
+        }));
+      });
+    });
   }
 
   async loadTimers() {
@@ -36,34 +76,8 @@ export default class HomeDetailScreen extends React.Component {
     this.setState({ timerList: _timerList.data });
   }
 
-  countButton() {
-    if (this.state.firstTimeClicked === 0) {
-      this.setState(prevState => ({
-        firstTimeClicked: 1
-      }));
-    }
-
-    if (this.state.firstTimeClicked !== 0 && this.state.paused === 0) {
-      this.myInterval = setInterval(() => {
-        this.setState(prevState => ({
-          second: prevState.sec + 1
-        }));
-        //분 증가
-        if (this.state.second === 60) {
-          this.setState(prevState => ({
-            second: 0,
-            minute: prevState.minute + 1
-          }));
-        }
-        //시간 증가
-        if (this.state.minute === 60) {
-          this.setState(prevState => ({
-            minute: 0,
-            hour: prevState.hour + 1
-          }));
-        }
-      }, 1000);
-    }
+  componentDidMount() {
+    this.loadTimers();
   }
 
   componentWillMount() {
@@ -94,7 +108,7 @@ export default class HomeDetailScreen extends React.Component {
               <AntDesign size={50} name={"clockcircleo"}></AntDesign>
               {this.state.timerList.map(timerSet => (
                 <View key={timerSet.pk}>
-                  {(function() {
+                  {(function () {
                     if (timerSet.pk === pk) {
                       const pad = n => (n < 10 ? "0" + n : n);
                       return (
@@ -111,12 +125,16 @@ export default class HomeDetailScreen extends React.Component {
             <View style={styles.HomeDetailIconBox}>
               <View style={styles.HomeDetailFieldArrangement}>
                 <AntDesign size={30} name={"plus"}></AntDesign>
-                <Timer
-                  style={styles.HomeDetailFieldText}
-                  second={second}
-                  hour={hour}
-                  minute={minute}
-                />
+                <View>
+                  {(function () {
+                    const pad = n => (n < 10 ? "0" + n : n);
+                    return (
+                      <Text style={styles.HomeDetailFieldText}>
+                        {pad(hour)}:{pad(minute)}:{pad(second)}
+                      </Text>
+                    );
+                  })()}
+                </View>
               </View>
             </View>
           </View>
@@ -126,7 +144,7 @@ export default class HomeDetailScreen extends React.Component {
           <View style={styles.HomeDetailFieldArrangement}>
             {this.state.timerList.map(timerSet => (
               <View key={timerSet.pk}>
-                {(function() {
+                {(function () {
                   if (timerSet.pk === pk) {
                     return (
                       <Text style={styles.HomeDetailFieldTitle}>
@@ -150,58 +168,35 @@ export default class HomeDetailScreen extends React.Component {
           {this.state.firstTimeClicked === 0 ? (
             <View style={styles.HomeDetailButtonBox}>
               <View style={styles.HomeDetailTimerButton}>
-                <TouchableOpacity
-                  onPress={() => {
-                    // this.setState(prevState => ({
-                    //   paused: 0
-                    // }));
-                    // this.countButton();
-                  }}
-                >
+                <TouchableOpacity onPress={() => { this.handleAction() }}>
                   <Text style={{ color: "white" }}>측정시작</Text>
                 </TouchableOpacity>
               </View>
             </View>
           ) : (
-            <View style={styles.HomeDetailButtonBox}>
-              {this.state.paused === 0 ? (
-                <View style={styles.HomeDetailTimerButton2}>
-                  <TouchableOpacity
-                  // onPress={() => {
-                  //   this.setState(prevState => ({
-                  //     paused: 1
-                  //   }));
-                  // }}
-                  >
-                    <Text style={{ color: "white" }}>일시정지</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
+              <View style={styles.HomeDetailButtonBox}>
+                {this.state.paused === false ? (
+                  <View style={styles.HomeDetailTimerButton2}>
+                    <TouchableOpacity onPress={() => { this.handlePause() }}>
+                      <Text style={{ color: "white" }}>일시정지</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                    <View style={styles.HomeDetailTimerButton}>
+                      <TouchableOpacity onPress={() => { this.handleAction() }}>
+                        <Text style={{ color: "white" }}>이어서 측정하기</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 <View style={styles.HomeDetailTimerButton}>
-                  <TouchableOpacity
-                  // onPress={() => {
-                  //   this.setState(prevState => ({
-                  //     paused: 0
-                  //   }));
-                  // }}
-                  >
-                    <Text style={{ color: "white" }}>이어서 측정하기</Text>
+                  <TouchableOpacity onPress={() => { this.handleSave() }}>
+                    <Text style={{ color: "white" }}>중지 및 저장</Text>
                   </TouchableOpacity>
                 </View>
-              )}
-              <View style={styles.HomeDetailTimerButton}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate("Home");
-                  }}
-                >
-                  <Text style={{ color: "white" }}>중지 및 저장</Text>
-                </TouchableOpacity>
               </View>
-            </View>
-          )}
+            )}
         </View>
-      </View>
+      </View >
     );
   }
 }
