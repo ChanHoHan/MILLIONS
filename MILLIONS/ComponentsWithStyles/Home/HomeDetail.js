@@ -1,133 +1,202 @@
 import React from "react";
-import { View, Text, Button, BackHandler } from "react-native";
+import { View, Text, TouchableOpacity, BackHandler } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import styles from "./HomeStyles";
+import timerData from "../../RequestCRUD";
 
 export default class HomeDetailScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hour: 0,
+      minute: 0,
+      second: 0,
+      time: 0,
+      paused: true,
+      firstTimeClicked: 0,
+      timerList: [],
+    };
+    this.backButtonPress = this.backButtonPress.bind(this);
+  }
 
-    constructor(props) {
-        super(props)
+  handleAction() {
+    const { hour, minute, second, paused } = this.state;
 
-        this.backButtonPress = this.backButtonPress.bind(this);
-    }
+    this.setState(() => ({
+      paused: !paused,
+      firstTimeClicked: 1,
+      time: Number((hour * 3600) + (minute * 60) + second)
+    }), () => this.timerStart());
+  }
 
-    componentWillMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.backButtonPress);
-    }
+  handlePause() {
+    const { paused } = this.state;
+    clearInterval(this.interval);
+    this.setState(() => ({
+      paused: !paused,
+    }));
+  }
 
-    componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.backButtonPress);
-    }
+  handleSave() {
+    this.props.navigation.navigate("Home");
+  }
 
-    backButtonPress = () => {
-        return true;
-    }
+  timerStart() {
+    this.interval = setInterval(() => {
+      this.timerAction()
+    }, 1000);
+  }
 
-    render() {
-        return (
-            <View style={styles.HomeDetailContainer}>
+  timerAction() {
+    const { time } = this.state;
 
-                <View style={styles.LogoContainer}>
-                    <Text style={styles.LogoTextStyle}>Millions</Text>
+    this.setState(() => ({
+      time: time + 1,
+    }), () => this.timeSetter());
+  }
+
+  timeSetter() {
+    const { time } = this.state;
+
+    this.setState(() => ({
+      hour: Math.floor(time / 3600),
+    }), () => {
+      this.setState((prevState) => ({
+        minute: Math.floor((time - prevState.hour * 3600) / 60),
+      }), () => {
+        this.setState((prevState) => ({
+          second: time - prevState.hour * 3600 - prevState.minute * 60,
+        }));
+      });
+    });
+  }
+
+  async loadTimers() {
+    const _timerList = await timerData.readTimer();
+    this.setState({ timerList: _timerList.data });
+  }
+
+  componentDidMount() {
+    this.loadTimers();
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.backButtonPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.backButtonPress);
+  }
+
+  backButtonPress = () => {
+    return true;
+  };
+
+  render() {
+    const { hour, minute, second } = this.state;
+    const { navigation } = this.props;
+    const pk = navigation.getParam("pk");
+    return (
+      <View style={styles.HomeDetailContainer}>
+        <View style={styles.LogoContainer}>
+          <Text style={styles.LogoTextStyle}>Millions</Text>
+        </View>
+
+        <View style={styles.HomeDetailContent}>
+          <View style={styles.HomeDetailIconBox}>
+            <View style={styles.HomeDetailFieldArrangement}>
+              <AntDesign size={50} name={"clockcircleo"}></AntDesign>
+              {this.state.timerList.map(timerSet => (
+                <View key={timerSet.pk}>
+                  {(function () {
+                    if (timerSet.pk === pk) {
+                      const pad = n => (n < 10 ? "0" + n : n);
+                      return (
+                        <Text style={styles.HomeDetailTimerText}>
+                          {pad(timerSet.hour)}:{pad(timerSet.minute)}:
+                          {pad(timerSet.second)}
+                        </Text>
+                      );
+                    }
+                  })()}
                 </View>
-
-                <View style={styles.HomeDetailContent}>
-                    <View style={styles.HomeDetailIconBox}>
-                        <View style={styles.HomeDetailFieldArrangement}>
-                            <AntDesign size={50} name={"clockcircleo"}></AntDesign>
-                            <Text style={styles.HomeDetailTimerText}>10 : 20 : 30</Text>
-                        </View>
-                        <View style={styles.HomeDetailIconBox}>
-                            <View style={styles.HomeDetailFieldArrangement}>
-                                <AntDesign size={30} name={"plus"}></AntDesign>
-                                <Text style={styles.HomeDetailPlusText}>00 : 10 : 20</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.HomeDetailContent}>
-                    <View style={styles.HomeDetailFieldArrangement}>
-                        <Text style={styles.HomeDetailFieldTitle}>공부</Text>
-                        <Text style={{ fontSize: 20 }}>라는</Text>
-                    </View>
-                    <View>
-                        <Text style={styles.HomeDetailFieldText}>그대의 노고에 누적 중</Text>
-                    </View>
-                </View>
-
-                <View style={styles.HomeDetailContent}>
-                    <View style={styles.HomeDetailButtonBox}>
-                        <View style={styles.HomeDetailTimerStartButton}>
-                            <Button color="white" title="측정시작" onPress={() => this.props.navigation.navigate("Home")}></Button>
-                        </View>
-                        <View style={styles.HomeDetailTimerStopButton}>
-                            <Button color="white" title="측정시작" onPress={() => this.props.navigation.navigate("Home")}></Button>
-                        </View>
-                    </View>
-                </View>
-
+              ))}
             </View>
-        );
-    }
+            <View style={styles.HomeDetailIconBox}>
+              <View style={styles.HomeDetailFieldArrangement}>
+                <AntDesign size={30} name={"plus"}></AntDesign>
+                <View>
+                  {(function () {
+                    const pad = n => (n < 10 ? "0" + n : n);
+                    return (
+                      <Text style={styles.HomeDetailFieldText}>
+                        {pad(hour)}:{pad(minute)}:{pad(second)}
+                      </Text>
+                    );
+                  })()}
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.HomeDetailContent}>
+          <View style={styles.HomeDetailFieldArrangement}>
+            {this.state.timerList.map(timerSet => (
+              <View key={timerSet.pk}>
+                {(function () {
+                  if (timerSet.pk === pk) {
+                    return (
+                      <Text style={styles.HomeDetailFieldTitle}>
+                        {timerSet.category}
+                      </Text>
+                    );
+                  }
+                })()}
+              </View>
+            ))}
+            <Text style={{ fontSize: 20 }}>에</Text>
+          </View>
+          <View>
+            <Text style={styles.HomeDetailFieldText}>
+              그대의 노고를 누적 중
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.HomeDetailContent}>
+          {this.state.firstTimeClicked === 0 ? (
+            <View style={styles.HomeDetailButtonBox}>
+              <View style={styles.HomeDetailTimerButton}>
+                <TouchableOpacity onPress={() => { this.handleAction() }}>
+                  <Text style={{ color: "white" }}>측정시작</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : (
+              <View style={styles.HomeDetailButtonBox}>
+                {this.state.paused === false ? (
+                  <View style={styles.HomeDetailTimerButton2}>
+                    <TouchableOpacity onPress={() => { this.handlePause() }}>
+                      <Text style={{ color: "white" }}>일시정지</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                    <View style={styles.HomeDetailTimerButton}>
+                      <TouchableOpacity onPress={() => { this.handleAction() }}>
+                        <Text style={{ color: "white" }}>이어서 측정하기</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                <View style={styles.HomeDetailTimerButton}>
+                  <TouchableOpacity onPress={() => { this.handleSave() }}>
+                    <Text style={{ color: "white" }}>중지 및 저장</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+        </View>
+      </View >
+    );
+  }
 }
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1
-//     },
-
-//     header: {
-//         height: 60,
-//         alignItems: "center",
-//         marginTop: 30,
-//         marginBottom: 30
-//     },
-//     headerText: {
-//         fontWeight: "bold",
-//         color: "black",
-//         fontSize: 30
-//     },
-//     content: {
-//         flex: 1
-//     },
-//     mainTimerInfo: {
-//         width: "100%",
-//         alignItems: "center",
-//         justifyContent: "center"
-//     },
-//     mainTimerHead: {
-//         flexDirection: "row"
-//     },
-//     timerTextInfo: {
-//         marginLeft: 25,
-//         textAlign: "right",
-//         fontWeight: "600",
-//         fontSize: 30,
-//     },
-//     plusTextInfo: {
-//         marginLeft: 40,
-//         textAlign: "right",
-//         fontWeight: "600",
-//         fontSize: 30
-//     },
-//     fieldTitle: {
-//         textAlign: "left",
-//         marginLeft: 70,
-//         fontWeight: "800",
-//         fontSize: 20
-//     },
-//     fieldDetail: {
-//         textAlign: "right",
-//         marginRight: 70,
-//         fontSize: 20
-//     },
-//     stopTimerButton: {
-//         backgroundColor: "grey",
-//         borderRadius: 5,
-//         width: 100,
-//         alignItems: "center",
-//         justifyContent: "center",
-//         height: 50
-//     }
-// });

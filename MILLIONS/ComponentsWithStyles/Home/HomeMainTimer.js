@@ -20,31 +20,3 @@ export default class HomeMainTimer extends React.Component {
     );
   }
 }
-
-// const styles = StyleSheet.create({
-//   mainTimerInfo: {
-//     width: "100%",
-//     alignItems: "center",
-//     justifyContent: "center"
-//   },
-//   mainTimerHead: {
-//     flexDirection: "row"
-//   },
-//   mainTimerMent: {
-//     textAlign: "center",
-//     fontSize: 25,
-//     marginLeft: 10,
-//     marginTop: 10,
-//     fontWeight: "bold"
-//   },
-//   mainTimerSubject: {
-//     textAlign: "center",
-//     fontSize: 50,
-//     fontWeight: "bold"
-//   },
-//   mainTimerTime: {
-//     textAlign: "center",
-//     fontSize: 60,
-//     fontWeight: "600"
-//   }
-// });
