@@ -4,13 +4,13 @@ import {View,Button,TextInput,StyleSheet} from 'react-native'
 import styles from './SignUpStyles.js';
 export default class SignUpScreen extends React.Component {
   state = {
-    username: '', password: '', email: '', phone_number: ''
+    username: '', password: '', email: ''
   }
   onChangeText = (key, val) => {
     this.setState({ [key]: val })
   }
   signUp = async () => {
-    const { username, password, email, phone_number } = this.state
+    const { username, password, email} = this.state
     try {
       // here place your signup logic
       console.log('user successfully signed up!: ', success)

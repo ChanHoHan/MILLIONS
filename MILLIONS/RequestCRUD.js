@@ -1,7 +1,7 @@
 import axios from "axios";
 import ENV from "./environment";
 
-axios.defaults.baseURL = "";
+axios.defaults.baseURL = "http://172.30.1.28:8000";
 
 export default {
   readTimer() {
