@@ -1,7 +1,7 @@
 <<<<<<< HEAD
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
-import LoginScreen from "./ComponentsWithStyles/Login/Login.js"
+import LoginScreen from "./ComponentsWithStyles/Login/Login.js";
 import HomeScreen from "./ComponentsWithStyles/Home/Home.js";
 import HomeDetailScreen from "./ComponentsWithStyles/Home/HomeDetail.js";
 
@@ -12,7 +12,7 @@ const AppNavigator = createStackNavigator(
     HomeDetail: {
       screen: HomeDetailScreen,
       navigationOptions: {
-        gesturesEnabled: false,
+        gesturesEnabled: false
       }
     }
 =======
